@@ -11,8 +11,13 @@
     <title>circlechat</title>
   </head>
   <body>
-    {% block content %}
-    {% endblock content %}
+	<div class='navbar'>
+		{% include "components/navbar.html" %}
+	</div>
+	<div class='container-fluid'>
+    	{% block content %}
+    	{% endblock content %}
+	</div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

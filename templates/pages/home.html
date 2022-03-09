@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-Welcome to this bad twitter clone
+<div class='row '> <!--text-center-->
+	<div class='col'>
+		Welcome to this bad twitter clone
+	</div
+</div>
 
 <div id='tweets'>
     Error!
@@ -18,11 +22,12 @@ Welcome to this bad twitter clone
 
 	function handleDidLike(tweet_id, currentCount) {
 		console.log(tweet_id, currentCount)
+		return
 	}
 
 	function likeBtn(tweet) {
 		return "<button class='btn btn-primary btn-sm' onclick=handleDidLike(" +
-			tweet.id + "," + tweet.likes +")>" + tweet.likes " Likes</button>"
+			tweet.id + "," + tweet.likes +")>" + tweet.likes +" Likes</button>"
 	}
 
 	function formatTweetElement(tweet) {
