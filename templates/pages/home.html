@@ -51,6 +51,7 @@
             var currentItem = formatTweetElement(tweetObj)
                 finalTweetStr += currentItem
         }
+		console.log(finalTweetStr)
         tweetsElement.innerHTML = finalTweetStr
     }
     xhr.send()
