@@ -9,14 +9,13 @@ def home_view(request, *args, **kwargs):
     return render(request, 'pages/home.html', context = {}, status=202)
 
 def tweet_create_view(request, *args, **kwargs):
-	form = TweetForm(request.POST or None)
-	if form.is_valid():
-		obj = form.save(commit=False)
-		# Form related logic
-		obj.save()
-		form = TweetForm()
-
-	return render(request, 'components/form.html', context={"form": form})
+    form = TweetForm(request.POST or None)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        # do other form related logic
+        obj.save()
+        form = TweetForm()
+    return render(request, 'components/form.html', context={"form": form})
 
 def tweet_list_view(request, *args, **kwargs):
     """
