@@ -8,52 +8,90 @@
 	</div
 </div>
 
-<div class='row' id='tweets'>
+<div class='row mb-3'
+    <div class='col-md-4 mx-auto col-10'>
+        <form class='form' id='post-create-form' method='POST' action='/create-post'>
+            {% csrf_token %}
+            <input type='hidden' value='/' name='next'/>
+            <textarea class='form-control' name='content' placeholder='Your post...'></textarea>
+            <button type='submit' class='btn btn-primary btn-bg'>POST</button>
+        </form>
+    </div>
+</div>
+<div class='row' id='posts'>
     Error!
 </div>
 
 <script>
-    const tweetsElement = document.getElementById("tweets") // getting html element
-    tweetsElement.innerHTML = 'Loading...' // setting html in element 
+ 
+    function handlePostCreateFormDidSubmit(event) {
+        event.preventDefault()
+        const form = event.target
+        const formData = new FormData(form)
+        const url = form.getAttribute("action")
+        const method = form.getAttribute("method")
+        const xhr = new XMLHttpRequest() 
+        xhr.open(method, url)
+        xhr.setRequestHeader("HTTP_REQUESTED_WITH", "XMLHttpRequest")
+        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+        xhr.onload = function() {
+            const serverResponse = xhr.response
+            console.log(xhr.status, serverResponse)
+            const postsEl = document.getElementById("posts") // getting html element
+            loadPosts(postsEl)
+        }
+        xhr.send(formData)
+    }
 
-    const xhr = new XMLHttpRequest() // new instance of a class
-    const method = 'GET'
-    const url = "/tweets"
-    const responseType = "json"
+    const postCreateFormEl = document.getElementById('post-create-form')
+    
+    postCreateFormEl.addEventListener("submit", handlePostCreateFormDidSubmit)
 
-	function handleDidLike(tweet_id, currentCount) {
-		console.log(tweet_id, currentCount)
+    const postsEl = document.getElementById("posts") // getting html element
+    postsEl.innerHTML = 'Loading...' // setting html in element 
+
+    const loadPosts = function(postElement) {
+        const xhr = new XMLHttpRequest() // new instance of a class
+        const method = 'GET'
+        const url = "/posts"
+        const responseType = "json"
+
+        xhr.responseType = responseType
+        xhr.open(method, url)
+        xhr.onload = function() {
+            const serverResponse = xhr.response
+            const listedItems = serverResponse.response // array
+            var finalPostStr = ""
+            var i;
+            for (i=0;i<listedItems.length; i++) {
+                var postObj = listedItems[i]
+                var currentItem = formatPostElement(postObj)
+                    finalPostStr += currentItem
+            }
+            // console.log(finalPostStr)
+            postElement.innerHTML = finalPostStr
+        }
+        xhr.send()
+    }
+
+    loadPosts(postsEl)
+
+	function handleDidLike(post_id, currentCount) {
+		console.log(post_id, currentCount)
 		return
 	}
 
-	function likeBtn(tweet) {
+	function likeBtn(post) {
 		return "<button class='bg-button btn btn-primary btn-sm' onclick=handleDidLike(" +
-			tweet.id + "," + tweet.likes +")>" + tweet.likes +" Likes</button>"
+			post.id + "," + post.likes +")>" + post.likes +" Likes</button>"
 	}
 
-	function formatTweetElement(tweet) {
-		var formattedTweet = "<div class='col-12 border border-info rounded py-3 mb-4 tweet' id='tweet-"+ tweet.id 
-			+"'><p>" + tweet.content + 
-			"</p><div class ='btn-group'>" + likeBtn(tweet) +
+	function formatPostElement(post) {
+		var formattedPost = "<div class='col-12 border border-info rounded py-3 mb-4 post' id='post-"+ post.id 
+			+"'><p>" + post.content + 
+			"</p><div class ='btn-group'>" + likeBtn(post) +
 			"</div></div>"
-		return formattedTweet
+		return formattedPost
 	}
-	
-    xhr.responseType = responseType
-    xhr.open(method, url)
-    xhr.onload = function() {
-        const serverResponse = xhr.response
-        const listedItems = serverResponse.response // array
-        var finalTweetStr = ""
-        var i;
-        for (i=0;i<listedItems.length; i++) {
-			var tweetObj = listedItems[i]
-            var currentItem = formatTweetElement(tweetObj)
-                finalTweetStr += currentItem
-        }
-		console.log(finalTweetStr)
-        tweetsElement.innerHTML = finalTweetStr
-    }
-    xhr.send()
 </script>
 {% endblock content %}
