@@ -1,2 +1,2 @@
 language = "python3"
-run = "pyenv shell; ./manage.py runserver 0.0.0.0:8086"
+run = "python3 -m pip install pipenv; pipenv shell; python3 -m pip install requirements.txt; ./manage.py runserver 0.0.0.0:8086"

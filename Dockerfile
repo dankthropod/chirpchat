@@ -10,9 +10,12 @@ RUN git clone --depth=1 https://github.com/pyenv/pyenv.git .pyenv
 ENV PYENV_ROOT="${HOME}/.pyenv"
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
 
-ENV PYTHON_VERSION=3.8.6
+ENV PYTHON_VERSION=3.5
 RUN pyenv install ${PYTHON_VERSION}
 RUN pyenv global ${PYTHON_VERSION}
+
+ENV DJANGO_VERSION=2.2
+RUN pipenv install django==${DJANGO_VERSION}
 
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
 
