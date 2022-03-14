@@ -24,7 +24,7 @@ WORKDIR /app
 RUN apt-get install -y mecab-ipadic-utf8
 RUN touch /usr/local/etc/mecabrc
 
-COPY poetry.lock pyproject.toml ./
+COPY poetry.lock ./
 RUN /bin/bash -c 'source $HOME/.poetry/env && POETRY_VIRTUALENVS_IN_PROJECT=true poetry install --no-dev --no-root'
 
 COPY . .
